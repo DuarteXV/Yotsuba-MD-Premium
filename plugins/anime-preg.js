@@ -31,6 +31,6 @@ handler.help = ['coffee']
 handler.tags = ['anime']
 handler.command = ['preg', 'preñar', 'embarazar', 'ireporpan']
 handler.group = true
-
+handler.register = true;
 export default handler
 

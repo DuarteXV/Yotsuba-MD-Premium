@@ -7,8 +7,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `💙 \`${name2}\` está pensando en \`${name || who}\`  🤔` 
-        : `💙 \`${name2}\` está reflexionando🤔`
+        ? `💙 \`${name2}\` está pensando en \`${name || who}\` en el concierto virtual 🤔` 
+        : `💙 \`${name2}\` está reflexionando en el mundo virtual de Miku 🤔`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/keB3oG-he3AAAAPo/square-witch.mp4'
@@ -32,6 +32,6 @@ handler.help = ['think']
 handler.tags = ['anime']
 handler.command = ['think', 'pensar']
 handler.group = true
-
+handler.register = true;
 export default handler
 

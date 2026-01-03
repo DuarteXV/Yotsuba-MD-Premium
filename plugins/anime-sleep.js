@@ -48,5 +48,5 @@ handler.help = ['sleep/dormir @tag'];
 handler.tags = ['anime'];
 handler.command = ['sleep','dormir'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

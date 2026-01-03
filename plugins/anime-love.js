@@ -47,5 +47,5 @@ handler.help = ['love2/enamorada @tag'];
 handler.tags = ['anime'];
 handler.command = ['love','amor','enamorada'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

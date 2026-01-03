@@ -1,7 +1,7 @@
 /* 
-⚽🏃‍♂️ Código creado por Brauliovh3 
+🎤💙 Código creado por Brauliovh3 
 ✧ https://github.com/Brauliovh3/HATSUNE-MIKU.git 
-⚽ Blue Lock Bot - Competitive Football Experience 🔥👑
+💙 Hatsune Miku Bot - Virtual Concert Experience 🎵✨
 */
 
 import fs from 'fs'
@@ -13,8 +13,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `⚽ \`${name2}\` está mostrando su lado competitivo con \`${name || who}\` en el campo de entrenamiento 🔥` 
-        : `⚽ \`${name2}\` está expresando su determinación en el partido 🔥`
+        ? `💙 \`${name2}\` está mostrando su lado más molesto con \`${name || who}\` en el escenario virtual 😤` 
+        : `💙 \`${name2}\` está expresando su sentimiento en el concierto virtual 😤`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/YPBIySGgoM0AAAPo/anime-rem.mp4'
@@ -37,5 +37,11 @@ handler.help = ['angry']
 handler.tags = ['anime']
 handler.command = ['angry', 'enojado','molesto', 'enojada', 'molesta']
 handler.group = true
+handler.register = true;
 
 export default handler
+
+
+
+
+

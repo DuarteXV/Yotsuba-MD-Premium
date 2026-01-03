@@ -8,13 +8,13 @@ import fs from 'fs'
 import path from 'path'
 
 let handler = async (m, { conn, usedPrefix }) => {
-    let who = m.mentionedJid.length > 0 ? m.mentionedJid[0] : (m.quoted ? m.quoted.sender : m.sender)
-    let name = conn.getName(who)
-    let name2 = conn.getName(m.sender)
+    let who = m.mentionedJid.length > 0 ? m.mentionedJid[0] : (m.quoted ? m.quoted.sender : null)
+    let name = who ? (await conn.getName(who)) || who.replace('@s.whatsapp.net', '') : null
+    let name2 = m.pushName || (await conn.getName(m.sender)) || m.sender.split('@')[0]
 
-    let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `⚽️ \`${name2}\` Asesinó virtualmente a \`${name || who}\` en el duelo de Blue Lock ⚔️` 
-        : `⚽️ \`${name2}\` desapareció dramáticamente en el campo de Blue Lock 💫`
+    let str = who
+        ? `💙 \`${name2}\` Asesinó virtualmente a \`${name}\` en el duelo del concierto ⚔️` 
+        : `💙 \`${name2}\` desapareció dramáticamente en el mundo virtual 💫`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/jrnH6CdNne0AAAPo/2s.mp4'
@@ -30,7 +30,7 @@ let handler = async (m, { conn, usedPrefix }) => {
         const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8]
         const video = videos[Math.floor(Math.random() * videos.length)]
         
-        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, ptt: true, mentions: [who] }, { quoted: m })
+        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, ptt: true, mentions: who ? [who] : [] }, { quoted: m })
     }
 }
 
@@ -38,5 +38,5 @@ handler.help = ['kill']
 handler.tags = ['anime']
 handler.command = ['kill', 'matar', 'muere']
 handler.group = true
-
+handler.register = true;
 export default handler

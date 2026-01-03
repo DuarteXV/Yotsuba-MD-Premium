@@ -13,8 +13,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `⚽️ \`${name2}\` está súper feliz por \`${name || who}\` 😊` 
-        : `⚽️ \`${name2}\` está radiante de felicidad 😊`
+        ? `💙 \`${name2}\` está súper feliz en el concierto virtual por \`${name || who}\` 😊` 
+        : `💙 \`${name2}\` está radiante de felicidad virtual como Miku 😊`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/D05kuhjm9rUAAAPo/jjk-anime.mp4'
@@ -38,5 +38,5 @@ handler.help = ['happy']
 handler.tags = ['anime']
 handler.command = ['happy', 'feliz']
 handler.group = true
-
+handler.register = true;
 export default handler

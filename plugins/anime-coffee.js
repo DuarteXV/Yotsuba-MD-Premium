@@ -12,8 +12,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `\`${name2}\` está tomando café con \`${name || who}\` en el café de Blue Lock (≧▽≦) ☕⚽️` 
-        : `\`${name2}\` está tomando café en Blue Lock ٩(●ᴗ●)۶ ☕`
+        ? `\`${name2}\` está tomando café con \`${name || who}\` en el café virtual (≧▽≦) ☕💙` 
+        : `\`${name2}\` está tomando café en el mundo virtual ٩(●ᴗ●)۶ ☕`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/16LH1QP3r08AAAPo/bocchi-coffee-bocchi-the-rock.mp4'
@@ -37,6 +37,6 @@ handler.help = ['coffee']
 handler.tags = ['anime']
 handler.command = ['coffe','coffee', 'cafe', 'café', 'tomarcafe', 'tomarcafé']
 handler.group = true
-
+handler.register = true;
 export default handler
 

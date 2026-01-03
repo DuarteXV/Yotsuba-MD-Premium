@@ -1,7 +1,7 @@
 /* 
-⚽🏃‍♂️ Código creado por Brauliovh3 
+🎤💙 Código creado por Brauliovh3 
 https://github.com/Brauliovh3/HATSUNE-MIKU.git 
-⚽ Blue Lock Bot - Football Reactions 🔥👑
+💙 Hatsune Miku Bot - Virtual Concert Experience 🎵✨
 */
 
 import fs from 'fs'
@@ -13,8 +13,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `⚽ \`${name2}\` le hizo una cara traviesa a \`${name || who}\` en el entrenamiento 😜` 
-        : `⚽ \`${name2}\` está siendo travies@ en el campo de Blue Lock 😜`
+        ? `💙 \`${name2}\` le hizo una cara traviesa a \`${name || who}\` en el concierto virtual 😜` 
+        : `💙 \`${name2}\` está siendo travies@ en el mundo virtual de Miku 😜`
     
     if (m.isGroup) {
         let pp = 'https://files.catbox.moe/lw9vib.mp4'
@@ -38,5 +38,6 @@ handler.help = ['bleh']
 handler.tags = ['anime']
 handler.command = ['bleh', 'lengua', 'hacercara', 'carita', 'carcajada']
 handler.group = true
-
+handler.register = true;
 export default handler
+

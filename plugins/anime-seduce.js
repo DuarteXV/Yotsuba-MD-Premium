@@ -46,5 +46,5 @@ handler.help = ['seduce/seducir @tag'];
 handler.tags = ['anime'];
 handler.command = ['seduce','seducir'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

@@ -12,8 +12,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `⚽️ ${name2}\` está aplaudiendo por \`${name || who}\` en el campo de entrenamiento 🔥` 
-        : `⚽️ ${name2}\` está aplaudiendo en el campo de entrenamiento (〃＞▿＜〃) ⚽️`
+        ? `💙 ${name2}\` está aplaudiendo por \`${name || who}\` en el concierto virtual 🎵` 
+        : `💙 ${name2}\` está aplaudiendo en el escenario virtual (〃＞▿＜〃) 💙`
     
     if (m.isGroup) {
         let pp = 'https://files.catbox.moe/bvl4r9.mp4'
@@ -37,6 +37,7 @@ handler.help = ['clap']
 handler.tags = ['anime']
 handler.command = ['clap', 'aplaudir', 'aplauso', 'aplausos', 'aplaudimiento']
 handler.group = true
+handler.register = true;
 
 export default handler
 

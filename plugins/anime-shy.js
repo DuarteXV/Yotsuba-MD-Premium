@@ -48,5 +48,5 @@ handler.help = ['shy/timida @tag'];
 handler.tags = ['anime'];
 handler.command = ['shy','timida'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

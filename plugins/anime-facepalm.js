@@ -12,8 +12,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `\`${name2}\` se da una palmada en la cara por las travesuras de \`${name || who}\` en el campo de Blue Lock (ভ_ ভ) ރ ⚽️🏆` 
-        : `\`${name2}\` se da una palmada en la cara en el campo de BlueLock(ভ_ ভ) ރ 🏆`
+        ? `\`${name2}\` se da una palmada en la cara por las travesuras de \`${name || who}\` en el concierto virtual (ভ_ ভ) ރ 🎤💙` 
+        : `\`${name2}\` se da una palmada en la cara en el mundo virtual (ভ_ ভ) ރ 🎵`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/OZe16n5yEP4AAAPo/vnc-vanitas.mp4'
@@ -37,5 +37,5 @@ handler.help = ['facepalm']
 handler.tags = ['anime']
 handler.command = ['facepalm', 'palmada','decepcionar','frustrar','desilusionar','disgustar','defraudar','desengañar','desencantar','abatir']
 handler.group = true
-
+handler.register = true;
 export default handler

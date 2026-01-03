@@ -46,5 +46,5 @@ handler.help = ['smoke/fumar @tag'];
 handler.tags = ['anime'];
 handler.command = ['smoke', 'fumar'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

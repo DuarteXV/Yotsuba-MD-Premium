@@ -46,5 +46,5 @@ handler.help = ['poke/picar @tag'];
 handler.tags = ['anime'];
 handler.command = ['poke','picar'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

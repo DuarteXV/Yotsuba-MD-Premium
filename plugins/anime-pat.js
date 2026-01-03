@@ -48,6 +48,6 @@ handler.help = ['patt/acariciar @tag'];
 handler.tags = ['anime'];
 handler.command = ['pat','acariciar'];
 handler.group = true;
-
+handler.register = true;
 export default handler;
 

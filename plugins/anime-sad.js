@@ -46,5 +46,5 @@ handler.help = ['sad/triste @tag'];
 handler.tags = ['anime'];
 handler.command = ['sad', 'triste'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

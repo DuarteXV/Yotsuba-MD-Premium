@@ -46,5 +46,5 @@ handler.help = ['run/correr @tag'];
 handler.tags = ['anime'];
 handler.command = ['run', 'correr'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

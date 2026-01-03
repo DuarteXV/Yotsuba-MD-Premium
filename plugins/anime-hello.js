@@ -26,14 +26,14 @@ let handler = async (m, { conn, usedPrefix }) => {
     }
     
     if (m.isGroup) {
-        let pp = 'https://qu.ax/EcRBE.mp4'; 
-        let pp2 = 'https://qu.ax/oARle.mp4'; 
-        let pp3 = 'https://qu.ax/eQXQh.mp4';
-        let pp4 = 'https://qu.ax/ddLrC.mp4';
-        let pp5 = 'https://qu.ax/oalOG.mp4';
-        let pp6 = 'https://qu.ax/nYJ.mp4';
-        let pp7 = 'https://qu.ax/bkcz.mp4';
-        let pp8 = 'https://qu.ax/oARle.mp4';
+        let pp = 'https://media.tenor.com/KM3VNP5d1FIAAAPo/miku-hello.mp4'; 
+        let pp2 = 'https://media.tenor.com/vNapCUP0d3oAAAPo/pjsk-pjsk-anime.mp4'; 
+        let pp3 = 'https://media.tenor.com/dxwWkT10bmoAAAPo/wind-breaker-wind-breaker-togame.mp4';
+        let pp4 = 'https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4';
+        let pp5 = 'https://media.tenor.com/2hBSkJhJarMAAAPo/hi.mp4';
+        let pp6 = 'https://media.tenor.com/6Gj1s-kpsd0AAAPo/dante-devil-may-cry-anime.mp4';
+        let pp7 = 'https://media.tenor.com/oylzydvTDV4AAAPo/kusuriya-no-hitorigoto-maomao.mp4';
+        let pp8 = 'https://media.tenor.com/t8Ab2Z5uMkUAAAPo/toji-jjk.mp4';
         
         const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8];
         const video = videos[Math.floor(Math.random() * videos.length)];
@@ -47,5 +47,5 @@ handler.help = ['hello/hola @tag'];
 handler.tags = ['anime'];
 handler.command = ['hello','hola'];
 handler.group = true;
-
+handler.register = true;
 export default handler;

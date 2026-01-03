@@ -48,5 +48,6 @@ handler.help = ['pout/pucheros @tag'];
 handler.tags = ['anime'];
 handler.command = ['pout', 'pucheros'];
 handler.group = true;
+handler.register = true;
 
 export default handler;

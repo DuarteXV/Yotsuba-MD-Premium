@@ -8,12 +8,12 @@ import path from 'path'
 
 let handler = async (m, { conn, usedPrefix }) => {
     let who = m.mentionedJid.length > 0 ? m.mentionedJid[0] : (m.quoted ? m.quoted.sender : m.sender)
-    let name = conn.getName(who)
-    let name2 = conn.getName(m.sender)
+    let name = m.pushName || (await conn.getName(who)) || who.split('@')[0]
+    let name2 = m.pushName || (await conn.getName(m.sender)) || m.sender.split('@')[0]
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `\`${name2}\` está mareado con \`${name || who}\` en el campo de blue lock(⸝⸝๑﹏๑⸝⸝) 🏆⚽️` 
-        : `\`${name2}\` está mareado en el campo (⸝⸝๑﹏๑⸝⸝) ✨`
+        ? `\`${name2}\` está mareado con \`${name || who}\` en el concierto virtual (⸝⸝๑﹏๑⸝⸝) 🎤💙` 
+        : `\`${name2}\` está mareado en el mundo virtual (⸝⸝๑﹏๑⸝⸝) ✨🎵`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/MAGJ3RtxAKgAAAPo/anime-aqua.mp4'
@@ -37,5 +37,5 @@ handler.help = ['drunk']
 handler.tags = ['anime']
 handler.command = ['drunk', 'borracho', 'mareado', 'dizzy','tomar','beber']
 handler.group = true
-
+handler.register = true;
 export default handler
