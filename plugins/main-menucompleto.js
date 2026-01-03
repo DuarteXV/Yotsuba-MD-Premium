@@ -22,7 +22,8 @@ Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(B
 *|✎ Tiempo Activo:* ${uptime}
 *|✎ Comandos:* ${totalCommands}
 *|✎ Sistema:* Multi Device 
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+
 
 *╭╼𝅄꒰𑁍⃪⚽👁️ ꒱ 𐔌 ESTADÍSTICAS PERSONALES 𐦯*
 *|✎ Nombre:* ${name}
@@ -206,18 +207,25 @@ Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(B
 > *𑁍⃪⚽ ❏ .ds* - Limpiar vestuario
 *╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
 
+
 > ⚽ *Cada comando es una oportunidad de gol* 👁️`.trim()
 
 await conn.sendMessage(m.chat, { 
 text: txt,
 contextInfo: {
 mentionedJid: [userId],
+isForwarded: true,
+forwardedNewsletterMessageInfo: {
+  newsletterJid: '120363420979328566@newsletter',
+  newsletterName: '⏤͟͞ू⃪𝐁𝕃𝐔𝔼 𝐋𝕆𝐂𝕂 𝐂𝕃𝐔𝔹 𑁯🩵ᰍ',
+  serverMessageId: -1
+},
 externalAdReply: {                
 title: 'Isagi Yoichi IA',
 body: 'Sistema de Visión Egoísta - Modo Fútbol',
 mediaType: 1,
 mediaUrl: global.redes || '',
-sourceUrl: global.redes || '',
+sourceUrl: 'https://whatsapp.com/channel/0029Vb73g1r1NCrTbefbFQ2T',
 thumbnail: await (await fetch(global.banner || 'http://files.hostrta.win/files/xzadonix_76.jpg')).buffer(),
 showAdAttribution: false,
 containsAutoReply: true,

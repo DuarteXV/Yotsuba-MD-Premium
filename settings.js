@@ -57,7 +57,7 @@ global.etiqueta = '⚽️DuarteXV⚽️'
 global.moneda = 'Blue-Lock-Points'
 global.welcom1 = '! Bienvenido al campo! ⚽️ \n✨ Soy Isagi Yoichi ✨ \n⚽️ Edita este mensaje con setwelcome ⚽️'
 global.welcom2 = '💫 ¡Hasta la próxima! Gracias por jugar con nosotros 🌟 \n⚽️ ¡Esperamos verte pronto en el campo! ⚽️ \n🔥 Edita este mensaje con setbye 🔥'
-global.banner = 'https://files.catbox.moe/l8qiik.jpeg'
+global.banner = 'http://files.hostrta.win/files/xzadonix_76.jpg'
 global.avatar = 'https://files.catbox.moe/h4vif1.jpeg'
 
 global.api = {
