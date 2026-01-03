@@ -7,7 +7,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
   let bot = global.db.data.settings[conn.user.jid] || {}
   let type = command.toLowerCase()
   let isAll = false, isUser = false
-  
+
   const typeMap = {
     'antilink': 'antiLink',
     'antilink2': 'antiLink2',
@@ -22,11 +22,10 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
     'antiprivado': 'antiPrivate',
     'antiprivate': 'antiPrivate'
   }
-  
+
   let dbKey = typeMap[type] || type
   let isEnable = chat[dbKey] || bot[dbKey] || false
 
-  
   const validFunctions = [
     'welcome', 'bienvenida',
     'antibot', 'antibots', 
@@ -51,7 +50,6 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
     'audios', 'audiosmenu'
   ]
 
-  
   const isValidFunction = (funcName) => {
     return validFunctions.includes(funcName.toLowerCase())
   }
@@ -59,12 +57,11 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
   if (command === 'enable') {
     if (args[0]) {
       type = args[0].toLowerCase()
-      
-      
+
       if (!isValidFunction(type)) {
         return conn.reply(m.chat, `❌ *Error:* La función "*${type}*" no existe.\n\n> Use *${usedPrefix}enable* sin parámetros para ver las funciones disponibles.`, m)
       }
-      
+
       isEnable = true
     } else {
       const funcionesDisponibles = [
@@ -97,18 +94,17 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
         `> Uso: *${usedPrefix}enable [función]*`,
         `> Ejemplo: *${usedPrefix}enable antilink*`
       ].join('\n')
-      
+
       return conn.reply(m.chat, funcionesDisponibles, m)
     }
   } else if (command === 'disable') {
     if (args[0]) {
       type = args[0].toLowerCase()
-      
-      
+
       if (!isValidFunction(type)) {
         return conn.reply(m.chat, `❌ *Error:* La función "*${type}*" no existe.\n\n> Use *${usedPrefix}disable* sin parámetros para ver las funciones disponibles.`, m)
       }
-      
+
       isEnable = false
     } else {
       const funcionesDisponibles = [
@@ -141,23 +137,23 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
         `> Uso: *${usedPrefix}disable [función]*`,
         `> Ejemplo: *${usedPrefix}disable antilink*`
       ].join('\n')
-      
+
       return conn.reply(m.chat, funcionesDisponibles, m)
     }
   } else if (args[0] === 'on' || args[0] === 'enable') {
-    
+
     if (!isValidFunction(type)) {
       return conn.reply(m.chat, `❌ *Error:* La función "*${type}*" no existe.\n\n> Funciones disponibles: ${validFunctions.filter((f, i, arr) => arr.indexOf(f) === i).slice(0, 10).join(', ')}...`, m)
     }
     isEnable = true;
   } else if (args[0] === 'off' || args[0] === 'disable') {
-    
+
     if (!isValidFunction(type)) {
       return conn.reply(m.chat, `❌ *Error:* La función "*${type}*" no existe.\n\n> Funciones disponibles: ${validFunctions.filter((f, i, arr) => arr.indexOf(f) === i).slice(0, 10).join(', ')}...`, m)
     }
     isEnable = false
   } else {
-    
+
     if (!isValidFunction(type)) {
       return conn.reply(m.chat, `❌ *Error:* La función "*${type}*" no existe.\n\n> Use *${usedPrefix}enable* para ver las funciones disponibles.`, m)
     }
@@ -178,9 +174,8 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
         throw false
       }
       chat.welcome = isEnable
-      console.log(`🔧 Welcome ${isEnable ? 'activado' : 'desactivado'} para ${m.chat}. Nuevo valor:`, chat.welcome)
       break  
-      
+
     case 'antiprivado':
     case 'antiprivate':
       isAll = true
@@ -199,11 +194,10 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
           throw false
         }
       }
-      
       chat.audios = isEnable
       break
 
-      case 'restrict':
+    case 'restrict':
     case 'restringir':
       isAll = true
       if (!isOwner) {
@@ -261,6 +255,18 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
         }
       }
       chat.autoresponder = isEnable
+      
+      // AÑADIDO: Controlar ISAGI_ACTIVE
+      if (typeof global.ISAGI_ACTIVE !== 'undefined') {
+        global.ISAGI_ACTIVE = isEnable
+      }
+      
+      // AÑADIDO: Enviar mensaje cuando se desactiva
+      if (!isEnable && m.chat) {
+        await conn.sendMessage(m.chat, {
+          text: `⚽ La función *autoresponder* se *desactivó* para este equipo`
+        }, { quoted: m })
+      }
       break
 
     case 'antisubbots':
@@ -298,7 +304,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.reaction = isEnable
       break
-      
+
     case 'nsfw':
     case 'modohorny':
       if (m.isGroup) {
@@ -334,9 +340,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       chat.detect = isEnable
       break
 
-
     case 'antilink':
-      
       if (!m.isGroup) {
         return conn.reply(m.chat, '⚽ Este comando debe usarse dentro del equipo que desea configurar. Use el comando en el equipo objetivo.', m)
       }
@@ -348,7 +352,6 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       break
 
     case 'antilink2':
-      
       if (!m.isGroup) {
         return conn.reply(m.chat, '⚽ Este comando debe usarse dentro del equipo que desea configurar. Use el comando en el equipo objetivo.', m)
       }
@@ -368,7 +371,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.antifake = isEnable
       break
-      
+
     case 'antiarabes':
     case 'antiarab':
       if (m.isGroup) {
@@ -379,7 +382,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.antiarabes = isEnable
       break
-      
+
     case 'antitoxic':
     case 'antitoxics':
       if (m.isGroup) {
@@ -390,7 +393,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.antitoxic = isEnable
       break
-      
+
     case 'autolevelup':
     case 'autonivel':
       if (m.isGroup) {
@@ -401,7 +404,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.autolevelup = isEnable
       break
-      
+
     case 'antispam':
       if (m.isGroup) {
         if (!(isAdmin || isOwner)) {
@@ -411,7 +414,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       }
       chat.antispam = isEnable
       break
-      
+
     case 'subbots':
       isAll = true
       if (!isOwner) {
@@ -421,8 +424,7 @@ const handler = async (m, { conn, usedPrefix, command, args, isOwner, isAdmin, i
       bot.subbots = isEnable
       break
   }
-  
-  
+
   if (isAll) {
     bot[dbKey] = isEnable
   } else {

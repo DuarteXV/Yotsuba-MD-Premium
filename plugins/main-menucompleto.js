@@ -7,7 +7,8 @@ let uptime = clockString(_uptime)
 let totalreg = Object.keys(global.db.data.users).length
 let totalCommands = Object.values(global.plugins).filter((v) => v.help && v.tags).length
 
-let txt = `🎯 *¡VISIÓN EGOÍSTA ACTIVADA!*
+let txt = `▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄
+🎯 *¡VISIÓN EGOÍSTA ACTIVADA!*
 
 Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(Bot Principal)' : '(Sub-Bot)')}*
 
@@ -16,6 +17,7 @@ Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(B
 - La precisión define la victoria final  
 - Opero bajo la filosofía del "Fútbol Egoísta"
 
+<<<<<<< HEAD
 *╭╼𝅄꒰𑁍⃪⚽👁️ ꒱ 𐔌 ANÁLISIS TÁCTICO 𐦯*
 *|✎ Creador:* 🏆 𝔻𝕦𝕒𝕣𝕥𝕖𝕩𝕍 🏆
 *|✎ Jugadores:* ${totalreg.toLocaleString()}
@@ -24,192 +26,188 @@ Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(B
 *|✎ Sistema:* Multi Device 
 *╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
 
+=======
+*꒰ 🥅ຼິ ANÁLISIS TÁCTICO 𐦯*
+*᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Creador:* 🏆 𝔻𝕦𝕒𝕣𝕥𝕖𝕩𝕍 🏆
+*᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Jugadores:* ${totalreg.toLocaleString()}
+*᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Tiempo Activo:* ${uptime}
+*᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Comandos:* ${totalCommands}
+*᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Sistema:* Multi Device 
+>>>>>>> cd5307fbafd0789510bfc1daf942cc2b226ac049
 
-*╭╼𝅄꒰𑁍⃪⚽👁️ ꒱ 𐔌 ESTADÍSTICAS PERSONALES 𐦯*
-*|✎ Nombre:* ${name}
-*|✎ Nivel:* ${user.level || 1}
-*|✎ Experiencia:* ${user.exp || 0}
-*|✎ Dinero:* ${user.money || 0}
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+*꒰👁️ຼິ ︵ ESTADÍSTICAS PERSONALES 𐦯*
+*᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Nombre:* ${name}
+*᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Nivel:* ${user.level || 1}
+*᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Experiencia:* ${user.exp || 0}
 
-*🎯 SISTEMA DE COMANDOS - VISIÓN COMPLETA*
+╭─「 *BUSCADORES* 」
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .pinterest
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .google
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .yts
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .imagen
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .infoanime
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .tiktoksearch
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .githubsearch
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .cuevana
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .tweetposts
+╰ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .npmjs
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 SCOUTING OFENSIVO 𐦯*
-> *𑁍⃪⚽ ❏ .pinterest* - Imágenes estratégicas
-> *𑁍⃪⚽ ❏ .google* - Búsqueda táctica
-> *𑁍⃪⚽ ❏ .yts* - Videos de jugadas
-> *𑁍⃪⚽ ❏ .imagen* - Imágenes de entrenamiento
-> *𑁍⃪⚽ ❏ .infoanime* - Scouting anime
-> *𑁍⃪⚽ ❏ .tiktoksearch* - Videos cortos
-> *𑁍⃪⚽ ❏ .githubsearch* - Scouting código
-> *𑁍⃪⚽ ❏ .cuevana* - Películas tácticas
-> *𑁍⃪⚽ ❏ .tweetposts* - Posts estratégicos
-> *𑁍⃪⚽ ❏ .npmjs* - Paquetes tácticos
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *DESCARGAS* 」
+├ 𑁍⃪⚽ ❏ .play
+├ 𑁍⃪⚽ ❏ .tiktok
+├ 𑁍⃪⚽ ❏ .instagram
+├ 𑁍⃪⚽ ❏ .facebook
+├ 𑁍⃪⚽ ❏ .mediafire
+├ 𑁍⃪⚽ ❏ .mega
+├ 𑁍⃪⚽ ❏ .twitter
+├ 𑁍⃪⚽ ❏ .ytmp3
+├ 𑁍⃪⚽ ❏ .ytmp4
+├ 𑁍⃪⚽ ❏ .gitclone
+╰ 𑁍⃪⚽ ❏ .apk
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 DESCARGAS RÁPIDAS 𐦯*
-> *𑁍⃪⚽ ❏ .play* - Jugadas musicales
-> *𑁍⃪⚽ ❏ .tiktok* - Jugadas virales
-> *𑁍⃪⚽ ❏ .instagram* - Posts visuales
-> *𑁍⃪⚽ ❏ .facebook* - Jugadas sociales
-> *𑁍⃪⚽ ❏ .mediafire* - Archivos pesados
-> *𑁍⃪⚽ ❏ .mega* - Almacenamiento táctico
-> *𑁍⃪⚽ ❏ .twitter* - Jugadas rápidas
-> *𑁍⃪⚽ ❏ .ytmp3/.ytmp4* - Jugadas completas
-> *𑁍⃪⚽ ❏ .gitclone* - Clonar estrategias
-> *𑁍⃪⚽ ❏ .apk* - Aplicaciones tácticas
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *STICKERS* 」
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .s
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .toimg
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .emojimix
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .qc
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .ttp
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .attp
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .brat
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .wm
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .setmeta
+╰ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .delmeta
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 STICKERS TÁCTICOS 𐦯*
-> *𑁍⃪⚽ ❏ .s* - Sticker rápido
-> *𑁍⃪⚽ ❏ .toimg* - Convertir a imagen
-> *𑁍⃪⚽ ❏ .emojimix* - Combinar emociones
-> *𑁍⃪⚽ ❏ .qc* - Stickers con texto
-> *𑁍⃪⚽ ❏ .ttp/.attp/.brat* - Texto animado
-> *𑁍⃪⚽ ❏ .wm* - Marca de agua
-> *𑁍⃪⚽ ❏ .setmeta* - Configurar pack
-> *𑁍⃪⚽ ❏ .delmeta* - Eliminar pack
-> *𑁍⃪⚽ ❏ .pfp* - Foto de perfil
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *ECONOMÍA* 」
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .work
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .daily
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .mine
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .casino
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .cf
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .slot
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .ruleta
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .steal
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .robarxp
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .bank
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .wallet
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .deposit
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .withdraw
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .transfer
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .buyall
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .cofre
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .weekly
+╰ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .monthly
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 ECONOMÍA DEL EQUIPO 𐦯*
-> *𑁍⃪⚽ ❏ .work* - Entrenar duro
-> *𑁍⃪⚽ ❏ .daily* - Bono diario
-> *𑁍⃪⚽ ❏ .mine* - Minar recursos
-> *𑁍⃪⚽ ❏ .casino* - Apostar fichas
-> *𑁍⃪⚽ ❏ .cf* - Cara o cruz
-> *𑁍⃪⚽ ❏ .slot* - Tragamonedas
-> *𑁍⃪⚽ ❏ .ruleta* - Ruleta rusa
-> *𑁍⃪⚽ ❏ .steal* - Robar balón
-> *𑁍⃪⚽ ❏ .robarxp* - Robar experiencia
-> *𑁍⃪⚽ ❏ .bank* - Banco táctico
-> *𑁍⃪⚽ ❏ .wallet* - Cartera personal
-> *𑁍⃪⚽ ❏ .deposit* - Depositar ganancias
-> *𑁍⃪⚽ ❏ .withdraw* - Retirar fondos
-> *𑁍⃪⚽ ❏ .transfer* - Pase de dinero
-> *𑁍⃪⚽ ❏ .buyall* - Comprar mejoras
-> *𑁍⃪⚽ ❏ .cofre* - Cofre sorpresa
-> *𑁍⃪⚽ ❏ .weekly* - Bono semanal
-> *𑁍⃪⚽ ❏ .monthly* - Bono mensual
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *GACHA* 」
+├ 𑁍⃪⚽ ❏ .rollwaifu
+├ 𑁍⃪⚽ ❏ .claim
+├ 𑁍⃪⚽ ❏ .harem
+├ 𑁍⃪⚽ ❏ .charimage
+├ 𑁍⃪⚽ ❏ .charinfo
+├ 𑁍⃪⚽ ❏ .givechar
+├ 𑁍⃪⚽ ❏ .vote
+╰ 𑁍⃪⚽ ❏ .waifusboard
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 GACHA ESTRATÉGICA 𐦯*
-> *𑁍⃪⚽ ❏ .rollwaifu* - Buscar refuerzos
-> *𑁍⃪⚽ ❏ .claim* - Reclutar jugador
-> *𑁍⃪⚽ ❏ .harem* - Plantilla completa
-> *𑁍⃪⚽ ❏ .charimage* - Foto del jugador
-> *𑁍⃪⚽ ❏ .charinfo* - Stats del jugador
-> *𑁍⃪⚽ ❏ .givechar* - Traspaso jugador
-> *𑁍⃪⚽ ❏ .vote* - Votar MVP
-> *𑁍⃪⚽ ❏ .waifusboard* - Tabla de posiciones
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *JUEGOS* 」
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .ttt
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .ppt
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .matematicas
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .ahorcado
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .sopa
+╰ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .pvp
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 JUEGOS DE ESTRATEGIA 𐦯*
-> *𑁍⃪⚽ ❏ .ttt* - Tres en raya táctico
-> *𑁍⃪⚽ ❏ .ppt* - Piedra, papel, tijera
-> *𑁍⃪⚽ ❏ .matematicas* - Entrenamiento mental
-> *𑁍⃪⚽ ❏ .ahorcado* - Adivinar jugada
-> *𑁍⃪⚽ ❏ .sopa* - Sopa de letras
-> *𑁍⃪⚽ ❏ .pvp* - Duelo personal
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *GRUPOS* 」
+├ 𑁍⃪⚽ ❏ .hidetag
+├ 𑁍⃪⚽ ❏ .kick
+├ 𑁍⃪⚽ ❏ .add
+├ 𑁍⃪⚽ ❏ .promote
+├ 𑁍⃪⚽ ❏ .demote
+├ 𑁍⃪⚽ ❏ .link
+├ 𑁍⃪⚽ ❏ .revoke
+├ 𑁍⃪⚽ ❏ .group
+├ 𑁍⃪⚽ ❏ .warn
+├ 𑁍⃪⚽ ❏ .unwarn
+├ 𑁍⃪⚽ ❏ .mute
+├ 𑁍⃪⚽ ❏ .unmute
+├ 𑁍⃪⚽ ❏ .delete
+├ 𑁍⃪⚽ ❏ .admins
+├ 𑁍⃪⚽ ❏ .gp
+├ 𑁍⃪⚽ ❏ .setwelcome
+├ 𑁍⃪⚽ ❏ .setbye
+├ 𑁍⃪⚽ ❏ .encuesta
+├ 𑁍⃪⚽ ❏ .invocar
+├ 𑁍⃪⚽ ❏ .gpbanner
+├ 𑁍⃪⚽ ❏ .gpname
+├ 𑁍⃪⚽ ❏ .gpdesc
+╰ 𑁍⃪⚽ ❏ .bot
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 TÁCTICA DE GRUPO 𐦯*
-> *𑁍⃪⚽ ❏ .hidetag* - Pase oculto
-> *𑁍⃪⚽ ❏ .kick* - Expulsar jugador
-> *𑁍⃪⚽ ❏ .add* - Contratar refuerzo
-> *𑁍⃪⚽ ❏ .promote* - Ascender a capitán
-> *𑁍⃪⚽ ❏ .demote* - Bajar de categoría
-> *𑁍⃪⚽ ❏ .link* - Enlace del equipo
-> *𑁍⃪⚽ ❏ .revoke* - Cambiar enlace
-> *𑁍⃪⚽ ❏ .group open/close* - Abrir/cerrar equipo
-> *𑁍⃪⚽ ❏ .warn* - Tarjeta amarilla
-> *𑁍⃪⚽ ❏ .unwarn* - Quitar amonestación
-> *𑁍⃪⚽ ❏ .mute* - Tiempo muerto
-> *𑁍⃪⚽ ❏ .unmute* - Reanudar juego
-> *𑁍⃪⚽ ❏ .delete* - Borrar jugada
-> *𑁍⃪⚽ ❏ .admins* - Ver capitanes
-> *𑁍⃪⚽ ❏ .gp* - Info del equipo
-> *𑁍⃪⚽ ❏ .setwelcome* - Mensaje bienvenida
-> *𑁍⃪⚽ ❏ .setbye* - Mensaje despedida
-> *𑁍⃪⚽ ❏ .encuesta* - Votación táctica
-> *𑁍⃪⚽ ❏ .invocar* - Convocar a todos
-> *𑁍⃪⚽ ❏ .gpbanner* - Cambiar escudo
-> *𑁍⃪⚽ ❏ .gpname* - Cambiar nombre equipo
-> *𑁍⃪⚽ ❏ .gpdesc* - Cambiar lema
-> *𑁍⃪⚽ ❏ .bot on/off* - Activar/desactivar
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *HERRAMIENTAS* 」
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .clima
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .translate
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .enhance
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .calcular
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .fake
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .letra
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .read
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .whatmusic
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .ss
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .length
+├ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .say
+├ ᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .todoc
+╰ ᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• .horario
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 HERRAMIENTAS TÁCTICAS 𐦯*
-> *𑁍⃪⚽ ❏ .clima* - Condiciones del campo
-> *𑁍⃪⚽ ❏ .translate* - Traductor táctico
-> *𑁍⃪⚽ ❏ .enhance* - Mejorar imagen
-> *𑁍⃪⚽ ❏ .calcular* - Cálculos rápidos
-> *𑁍⃪⚽ ❏ .fake* - Jugadas falsas
-> *𑁍⃪⚽ ❏ .letra* - Cambiar tipografía
-> *𑁍⃪⚽ ❏ .read* - Ver imagen única
-> *𑁍⃪⚽ ❏ .whatmusic* - Identificar himno
-> *𑁍⃪⚽ ❏ .ss* - Capturar pantalla
-> *𑁍⃪⚽ ❏ .length* - Ajustar tamaño
-> *𑁍⃪⚽ ❏ .say* - Repetir mensaje
-> *𑁍⃪⚽ ❏ .todoc* - Crear documento
-> *𑁍⃪⚽ ❏ .horario* - Horario global
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *REACCIONES* 」
+├ 𑁍⃪⚽ ❏ .hug
+├ 𑁍⃪⚽ ❏ .kiss
+├ 𑁍⃪⚽ ❏ .pat
+├ 𑁍⃪⚽ ❏ .slap
+├ 𑁍⃪⚽ ❏ .cry
+├ 𑁍⃪⚽ ❏ .happy
+├ 𑁍⃪⚽ ❏ .angry
+├ 𑁍⃪⚽ ❏ .love
+├ 𑁍⃪⚽ ❏ .dance
+├ 𑁍⃪⚽ ❏ .laugh
+├ 𑁍⃪⚽ ❏ .run
+├ 𑁍⃪⚽ ❏ .dias
+├ 𑁍⃪⚽ ❏ .noches
+╰ 𑁍⃪⚽ ❏ .think
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 REACCIONES EMOCIONALES 𐦯*
-> *𑁍⃪⚽ ❏ .hug* - Abrazo de equipo
-> *𑁍⃪⚽ ❏ .kiss* - Beso de gol
-> *𑁍⃪⚽ ❏ .pat* - Palmada de ánimo
-> *𑁍⃪⚽ ❏ .slap* - Tarjeta roja
-> *𑁍⃪⚽ ❏ .cry* - Llorar derrota
-> *𑁍⃪⚽ ❏ .happy* - Celebrar victoria
-> *𑁍⃪⚽ ❏ .angry* - Enfado táctico
-> *𑁍⃪⚽ ❏ .love* - Amor al juego
-> *𑁍⃪⚽ ❏ .dance* - Baile de gol
-> *𑁍⃪⚽ ❏ .laugh* - Risas en vestuario
-> *𑁍⃪⚽ ❏ .run* - Correr al ataque
-> *𑁍⃪⚽ ❏ .dias* - Buenos días equipo
-> *𑁍⃪⚽ ❏ .noches* - Buenas noches
-> *𑁍⃪⚽ ❏ .think* - Pensar jugada
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *PERFIL* 」
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .reg
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .unreg
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .profile
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .marry
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .divorce
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .setgenre
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .setbirth
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .setdescription
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .lb
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .level
+├ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .comprarpremium
+╰ ◯⃘🏆̸̷᪶⃞⍣⸽𝆹𝅥𝆺𝅥 .confesiones
 
-*꒰⚽👁️ ✎ ꒱ 𐔌 SISTEMA DE PERFIL 𐦯*
-> *𑁍⃪⚽ ❏ .reg* - Fichar por el equipo
-> *𑁍⃪⚽ ❏ .unreg* - Dar de baja
-> *𑁍⃪⚽ ❏ .profile* - Ver ficha técnica
-> *𑁍⃪⚽ ❏ .marry* - Contrato largo
-> *𑁍⃪⚽ ❏ .divorce* - Romper contrato
-> *𑁍⃪⚽ ❏ .setgenre* - Definir posición
-> *𑁍⃪⚽ ❏ .setbirth* - Fecha debut
-> *𑁍⃪⚽ ❏ .setdescription* - Biografía
-> *𑁍⃪⚽ ❏ .lb* - Tabla de goleadores
-> *𑁍⃪⚽ ❏ .level* - Nivel de habilidad
-> *𑁍⃪⚽ ❏ .comprarpremium* - Contrato premium
-> *𑁍⃪⚽ ❏ .confesiones* - Confesiones tácticas
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
-
-*꒰⚽👁️ ✎ ꒱ 𐔌 CONFIGURACIÓN TÁCTICA 𐦯*
-> *𑁍⃪⚽ ❏ .ping* - Velocidad de pase
-> *𑁍⃪⚽ ❏ .uptime* - Tiempo en cancha
-> *𑁍⃪⚽ ❏ .serbot* - Crear suplente
-> *𑁍⃪⚽ ❏ .qr* - Código de acceso
-> *𑁍⃪⚽ ❏ .status* - Estado del equipo
-> *𑁍⃪⚽ ❏ .infobot* - Info completa
-> *𑁍⃪⚽ ❏ .script* - Manual táctico
-> *𑁍⃪⚽ ❏ .staff* - Cuerpo técnico
-> *𑁍⃪⚽ ❏ .bots* - Jugadores suplentes
-> *𑁍⃪⚽ ❏ .links* - Redes del equipo
-> *𑁍⃪⚽ ❏ .sug* - Sugerir jugadas
-> *𑁍⃪⚽ ❏ .reporte* - Reportar lesión
-> *𑁍⃪⚽ ❏ .sistema* - Estado sistema
-> *𑁍⃪⚽ ❏ .speed* - Estadísticas velocidad
-> *𑁍⃪⚽ ❏ .views* - Espectadores
-> *𑁍⃪⚽ ❏ .funciones* - Jugadas disponibles
-> *𑁍⃪⚽ ❏ .ds* - Limpiar vestuario
-*╰─ׅ─ׅ┈─๋︩︪─⚽👁️─╯*
+╭─「 *CONFIGURACIÓN* 」
+├ 𑁍⃪⚽ ❏ .ping
+├ 𑁍⃪⚽ ❏ .uptime
+├ 𑁍⃪⚽ ❏ .serbot
+├ 𑁍⃪⚽ ❏ .qr
+├ 𑁍⃪⚽ ❏ .status
+├ 𑁍⃪⚽ ❏ .infobot
+├ 𑁍⃪⚽ ❏ .script
+├ 𑁍⃪⚽ ❏ .staff
+├ 𑁍⃪⚽ ❏ .bots
+├ 𑁍⃪⚽ ❏ .links
+├ 𑁍⃪⚽ ❏ .sug
+├ 𑁍⃪⚽ ❏ .reporte
+├ 𑁍⃪⚽ ❏ .sistema
+├ 𑁍⃪⚽ ❏ .speed
+├ 𑁍⃪⚽ ❏ .views
+├ 𑁍⃪⚽ ❏ .funciones
+╰ 𑁍⃪⚽ ❏ .ds
 
 
 > ⚽ *Cada comando es una oportunidad de gol* 👁️`.trim()
 
+<<<<<<< HEAD
 await conn.sendMessage(m.chat, { 
 text: txt,
 contextInfo: {
@@ -231,11 +229,31 @@ showAdAttribution: false,
 containsAutoReply: true,
 renderLargerThumbnail: true
 }}}, { quoted: m })
+=======
+let gifUrl = 'https://raw.githubusercontent.com/ANDERSONARRUE/Img.2/main/upload_1767146081404.gif'
+
+try {
+    // Enviar GIF con caption
+    await conn.sendMessage(m.chat, {
+        video: { url: gifUrl },
+        caption: txt,
+        gifPlayback: true,
+        mentions: [userId]
+    }, { quoted: m })
+} catch (error) {
+    console.error('Error al enviar GIF:', error)
+    // Si falla, enviar solo el texto
+    await conn.sendMessage(m.chat, {
+        text: txt,
+        mentions: [userId]
+    }, { quoted: m })
+}
+>>>>>>> cd5307fbafd0789510bfc1daf942cc2b226ac049
 }
 
 handler.help = ['menu']
 handler.tags = ['main']
-handler.command = ['menucompleto', 'comandos', 'helpcompleto', 'allmenu', 'menuall', 'ayudacompleto']
+handler.command = ['menu','help','allmenu', 'menuall']
 
 export default handler
 

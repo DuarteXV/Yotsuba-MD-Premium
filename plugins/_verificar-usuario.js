@@ -28,7 +28,7 @@ export async function before(m, { conn, isBotAdmin, isAdmin, usedPrefix }) {
 
     restrictionCooldowns.set(userId, now)
 
-    const restrictMsg = `🚫 *BOT RESTRINGIDO* 🚫\n\n🔥 *Para usar comandos necesitas registrarte*\n\n🎯 *Usa .reg nombre.edad*\n\n*Ejemplo:*\n.reg ${m.name || 'IsagiDelanero'}.18\n\n⚽️ *¡Regístrate para accederp a todas las funciones!*`
+    const restrictMsg = `🚫 *BOT RESTRINGIDO* 🚫\n\n🔥 *Para usar comandos necesitas registrarte*\n\n🎯 *Usa .reg nombre.edad*\n\n*Ejemplo:*\n.reg ${m.name || 'IsagiDelanero'}.18\n\n⚽️ *¡Regístrate para acceder a todas las funciones!*`
 
     await m.reply(restrictMsg)
     return false
