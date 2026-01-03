@@ -49,7 +49,7 @@ Soy *Isagi Yoichi IA* ⚽👁️ *${(conn.user.jid == global.conn.user.jid ? '(B
 *᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Tiempo Activo:* ${uptime}
 *᎒֑֬֫💫ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Comandos:* ${totalCommands}
 *᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Sistema:* Multi Device 
->>>>>>> cd5307fbafd0789510bfc1daf942cc2b226ac049
+
 
 *꒰👁️ຼິ ︵ ESTADÍSTICAS PERSONALES 𐦯*
 *᎒֑֬֫⚽ִִֺּֽֽׂ֪֤֭ׄؒᬼ-• Nombre:* ${name}
