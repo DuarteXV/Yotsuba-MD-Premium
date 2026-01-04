@@ -13,7 +13,7 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? ` \`${name2}\`se está bañando con \`${name || who}\` 🛁` 
+        ? ` \`${name2}\se está bañando con \${name || who}\` 🛁` 
         : ` \`${name2}\` está tomando un baño relajante 🛁`
     
     if (m.isGroup) {
