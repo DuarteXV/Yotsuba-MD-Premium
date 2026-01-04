@@ -14,7 +14,7 @@ let handler = async (m, { conn, usedPrefix }) => {
 
     let str = m.mentionedJid.length > 0 || m.quoted 
         ? ` \`${name2}\` está molesto con \`${name || who}\` 😤` 
-        : ` \`${name2}\` está enojado con😤`
+        : ` \`${name2}\` está enojado 😤`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/YPBIySGgoM0AAAPo/anime-rem.mp4'
