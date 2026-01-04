@@ -13,8 +13,8 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? `💙 \`${name2}\` está mostrando su lado más molesto con \`${name || who}\` en el escenario virtual 😤` 
-        : `💙 \`${name2}\` está expresando su sentimiento en el concierto virtual 😤`
+        ? ` \`${name2}\` está molesto con \`${name || who}\` 😤` 
+        : `💙 \`${name2}\` está enojado con😤`
     
     if (m.isGroup) {
         let pp = 'https://media.tenor.com/YPBIySGgoM0AAAPo/anime-rem.mp4'
