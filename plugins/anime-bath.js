@@ -13,9 +13,9 @@ let handler = async (m, { conn, usedPrefix }) => {
     let name2 = conn.getName(m.sender)
 
     let str = m.mentionedJid.length > 0 || m.quoted 
-        ? ` \`${name2}\`se está bañando con \${name || who}\` 🛁` 
-        : ` \`${name2}\` está tomando un baño relajante 🛁`
-    
+        ? `*${name2}* se está bañando con *${name}* 🛁` 
+        : `*${name2}* está tomando un baño relajante 🛁`
+
     if (m.isGroup) {
         let pp = 'https://files.catbox.moe/6hd5vu.mp4'
         let pp2 = 'https://files.catbox.moe/3nl2f1.mp4'
@@ -25,21 +25,24 @@ let handler = async (m, { conn, usedPrefix }) => {
         let pp6 = 'https://files.catbox.moe/tgq1fe.mp4'
         let pp7 = 'https://files.catbox.moe/h0sncb.mp4'
         let pp8 = 'https://files.catbox.moe/dg46q7.mp4'
-    
-        
+
         const videos = [pp, pp2, pp3, pp4, pp5, pp6, pp7, pp8]
         const video = videos[Math.floor(Math.random() * videos.length)]
-        
-        conn.sendMessage(m.chat, { video: { url: video }, gifPlayback: true, caption: str, ptt: true, mentions: [who] }, { quoted: m })
+
+        // Enviar el mensaje con la mención
+        conn.sendMessage(m.chat, {
+            video: { url: video }, 
+            gifPlayback: true, 
+            caption: str, 
+            mentions: [who, m.sender]
+        }, { quoted: m })
     }
 }
 
 handler.help = ['bath']
 handler.tags = ['anime']
-handler.help = ['bath']
 handler.command = ['bath', 'bañarse', 'ducha', 'relajarse', 'relajación']
 handler.group = true
-handler.register = true;
+handler.register = true
 
 export default handler
-
