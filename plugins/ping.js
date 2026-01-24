@@ -1,24 +1,22 @@
-import { performance } from 'perf_hooks'
+import { performance } from 'perf_hooks';
 
-let handler = async (m, { conn }) => {
-    let start = performance.now()
-    let { key } = await conn.sendMessage(m.chat, { text: '🚀 *Midiendo latencia...*' }, { quoted: m })
-    let end = performance.now()
-    let speed = (end - start).toFixed(2)
+const plugin = {
+    command: ['ping'], // Tu handler busca en arrays o regex
+    exec: async (conn, msg, { args }) => {
+        let start = performance.now();
+        const chat = msg.key.remoteJid;
+        
+        let { key } = await conn.sendMessage(chat, { text: '🚀 Probando...' }, { quoted: msg });
+        let end = performance.now();
+        let speed = (end - start).toFixed(2);
 
-    await conn.sendMessage(m.chat, { 
-        text: `🏓 *Pong!* \nLatencia: ${speed} ms`, 
-        edit: key 
-    })
-}
+        await conn.sendMessage(chat, { 
+            text: `🏓 *Pong!*\nLatencia: ${speed} ms`, 
+            edit: key 
+        });
+    },
+    group: false, // Funciona en todos lados
+    admin: false
+};
 
-handler.help = ['ping']
-handler.tags = ['main']
-handler.command = /^(ping)$/i
-
-// Propiedades de acceso
-handler.group = false    // Funciona en todos lados
-handler.admin = false    // No requiere ser admin
-handler.botAdmin = false // El bot no necesita ser admin
-
-export default handler
+export default plugin;
