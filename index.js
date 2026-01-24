@@ -1,86 +1,99 @@
-import makeWASocket, { useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion } from '@whiskeysockets/baileys';
-import { Boom } from '@hapi/boom';
+import { useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } from '@whiskeysockets/baileys';
+import makeWASocket from '@whiskeysockets/baileys';
 import pino from 'pino';
 import fs from 'fs';
 import path from 'path';
 import readline from 'readline';
 import chalk from 'chalk';
+import { Boom } from '@hapi/boom';
 import { handler } from './handler.js';
 
+// Configuración de la interfaz de lectura para la consola
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-const question = (text) => new Promise((resolve) => rl.question(text, resolve));
+const question = (texto) => new Promise((resolver) => rl.question(texto, resolver));
 
 global.plugins = {};
-global.ownerNumber = ""; 
+global.ownerNumber = ""; // Se guardará el número ingresado para la notificación
 
 async function startBot() {
-    // Cargar Plugins
+    // 1. CARGA DINÁMICA DE PLUGINS
     const pluginFolder = path.join(process.cwd(), 'plugins');
     if (!fs.existsSync(pluginFolder)) fs.mkdirSync(pluginFolder);
     const pluginFiles = fs.readdirSync(pluginFolder).filter(file => file.endsWith('.js'));
+    
     for (const file of pluginFiles) {
-        const module = await import(`./plugins/${file}`);
-        global.plugins[file] = module.default;
+        try {
+            const module = await import(`./plugins/${file}?update=${Date.now()}`);
+            global.plugins[file] = module.default || module;
+        } catch (e) {
+            console.error(`Error cargando plugin ${file}:`, e);
+        }
     }
+    console.log(chalk.cyan(`✦ ${Object.keys(global.plugins).length} Plugins cargados correctamente.`));
 
-    const { state, saveCreds } = await useMultiFileAuthState('sesion_bot');
+    // 2. CONFIGURACIÓN DE SESIÓN Y CONEXIÓN
+    const folderSesion = 'sesion_bot';
+    const { state, saveCreds } = await useMultiFileAuthState(folderSesion);
     const { version } = await fetchLatestBaileysVersion();
 
-    const conn = makeWASocket.default({
+    const connectionOptions = {
         version,
         logger: pino({ level: 'silent' }),
-        auth: state,
-        browser: ['Ubuntu', 'Chrome', '20.0.04'],
-        printQRInTerminal: false
-    });
+        printQRInTerminal: false, // Forzado para usar Pairing Code en Pterodactyl
+        auth: {
+            creds: state.creds,
+            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" })),
+        },
+        browser: ['Ubuntu', 'Edge', '110.0.1587.56'],
+        markOnlineOnConnect: true,
+    };
 
-    // Lógica de Vincular con Código
+    const conn = makeWASocket.default(connectionOptions);
+
+    // 3. SISTEMA DE PAIRING CODE (CÓDIGO DE 8 DÍGITOS)
     if (!conn.authState.creds.registered) {
-        console.log(chalk.yellow('\n--------------------------------------------'));
-        console.log(chalk.white('   SISTEMA DE VINCULACIÓN POR CÓDIGO'));
-        console.log(chalk.yellow('--------------------------------------------'));
-        const phoneNumber = await question(chalk.cyan(' > Introduce tu número (ej: 573001234567): '));
-        global.ownerNumber = phoneNumber.trim() + '@s.whatsapp.net';
-        
+        console.log(chalk.bgCyan.black('\n⌨  VINCULACIÓN POR CÓDIGO DE TEXTO '));
+        let phoneNumber = await question(chalk.bold.greenBright('✦ Ingresa tu número de WhatsApp con código de país (Ej: 573001234567):\n--> '));
+        phoneNumber = phoneNumber.replace(/\D/g, '');
+        global.ownerNumber = phoneNumber + '@s.whatsapp.net';
+
         setTimeout(async () => {
-            let code = await conn.requestPairingCode(phoneNumber.trim());
-            code = code?.match(/.{1,4}/g)?.join('-') || code;
-            console.log(chalk.white('\n🔗 TU CÓDIGO DE VINCULACIÓN ES: ') + chalk.bold.green(code));
-            console.log(chalk.gray('Pégalo en tu WhatsApp > Dispositivos vinculados\n'));
+            let code = await conn.requestPairingCode(phoneNumber);
+            code = code?.match(/.{1,4}/g)?.join("-") || code;
+            console.log(chalk.bold.white(chalk.bgMagenta(`\n✧ CÓDIGO DE VINCULACIÓN: ${code} ✧`)));
+            console.log(chalk.gray('Introdúcelo en WhatsApp > Dispositivos vinculados > Vincular con número\n'));
         }, 3000);
     }
 
+    // 4. GESTIÓN DE EVENTOS
     conn.ev.on('creds.update', saveCreds);
 
     conn.ev.on('connection.update', async (update) => {
         const { connection, lastDisconnect } = update;
-        
+
         if (connection === 'close') {
             const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
-            
-            // Mensaje de Reconexión en Consola
-            console.log(chalk.red(`\n[!] Conexión cerrada. Razón: ${reason}`));
-            console.log(chalk.blue('🔄 Reconectando...'));
+            console.log(chalk.bold.red(`\n[!] Conexión cerrada. Razón: ${reason}`));
             
             if (reason !== DisconnectReason.loggedOut) {
+                console.log(chalk.bold.blue('🔄 Reconectando...'));
                 startBot();
             } else {
-                console.log(chalk.red('❌ Sesión cerrada permanentemente. Borra la carpeta sesion_bot y reinicia.'));
+                console.log(chalk.bold.redBright(`\n❌ Sesión terminada. Borra la carpeta ${folderSesion} y reinicia.`));
             }
-        } else if (connection === 'open') {
-            console.log(chalk.green('\n✅ [BOT ONLINE] Conectado con éxito.'));
+        } 
+        
+        if (connection === 'open') {
+            console.log(chalk.bold.green('\n❀ BOT CONECTADO Y ONLINE ❀'));
             
-            if (global.ownerNumber) {
-                await conn.sendMessage(global.ownerNumber, { 
-                    text: '🚀 *¡Bot Conectado!*\n\nYa puedes usar los comandos. El sistema de reconexión automática está activo.' 
-                });
-            }
+            // ENVÍO DE NOTIFICACIÓN DE ÉXITO
+            const target = global.ownerNumber || conn.user.id.split(':')[0] + '@s.whatsapp.net';
+            await conn.sendMessage(target, { 
+                text: `✅ *¡Conexión Exitosa!*\n\nEl bot ya está funcionando en Pterodactyl.\n\n*Estado:* Online\n*Plugins:* ${Object.keys(global.plugins).length}` 
+            });
+            console.log(chalk.cyanBright(`📩 Notificación enviada a: ${target}`));
         }
     });
 
-    conn.ev.on('messages.upsert', async m => {
-        await handler(conn, m);
-    });
-}
-
-startBot();
+    conn.ev.on('messages.upsert', async (chatUpdate) => {
+        try
