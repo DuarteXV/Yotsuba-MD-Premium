@@ -1,25 +1,19 @@
-import { performance } from 'perf_hooks';
+import speed from 'performance-now'
+import { spawn, exec, execSync } from 'child_process'
 
-const plugin = {
-    command: ['ping'], // IMPORTANTE: Debe ser un Array para tu handler.js
-    exec: async (conn, msg, { args }) => {
-        const chat = msg.key.remoteJid;
-        const start = performance.now();
-        
-        // Enviamos mensaje inicial
-        const { key } = await conn.sendMessage(chat, { text: '🚀 Mindiéndo latencia...' }, { quoted: msg });
-        
-        const end = performance.now();
-        const speed = (end - start).toFixed(2);
+let handler = async (m, { conn }) => {
+         let timestamp = speed();
+         let latensi = speed() - timestamp;
+         exec(`neofetch --stdout`, (error, stdout, stderr) => {
+          let child = stdout.toString("utf-8");
+          let ssd = child.replace(/Memory:/, "Ram:");
 
-        // Editamos para mostrar el resultado
-        await conn.sendMessage(chat, { 
-            text: `🏓 *Pong!* \nLatencia: ${speed} ms`, 
-            edit: key 
-        });
-    },
-    group: false,
-    admin: false
-};
+          conn.reply(m.chat, `*Velocidad:* ${latensi.toFixed(4)} ms`, m, rcanal);
+            });
+}
+handler.help = ['ping']
+handler.tags = ['info']
+handler.command = ['ping', 'p']
+handler.register = true
 
-export default plugin;
+export default handler
