@@ -1,50 +1,28 @@
-import makeWASocket, { useMultiFileAuthState, DisconnectReason } from '@whiskeysockets/baileys';
-import { Boom } from '@hapi/boom';
-import pino from 'pino';
-import fs from 'fs';
-import path from 'path';
-import qrcode from 'qrcode-terminal';
-import { handler } from './handler.js';
+// ... (tus imports anteriores)
+import readline from 'readline';
 
-global.plugins = {};
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+const question = (text) => new Promise((resolve) => rl.question(text, resolve));
 
 async function startBot() {
-    // Carga dinámica de plugins
-    const pluginFolder = path.join(process.cwd(), 'plugins');
-    if (!fs.existsSync(pluginFolder)) fs.mkdirSync(pluginFolder);
-    
-    const pluginFiles = fs.readdirSync(pluginFolder).filter(file => file.endsWith('.js'));
-    for (const file of pluginFiles) {
-        const module = await import(`./plugins/${file}`);
-        global.plugins[file] = module.default;
-    }
-
-    console.log(`✅ ${Object.keys(global.plugins).length} Plugins cargados correctamente.`);
+    // ... (tu carga de plugins)
 
     const { state, saveCreds } = await useMultiFileAuthState('sesion_bot');
+    
     const conn = makeWASocket.default({
         logger: pino({ level: 'silent' }),
         auth: state,
-        printQRInTerminal: true
+        browser: ['Ubuntu', 'Chrome', '20.0.04'], // Necesario para que funcione el código
+        printQRInTerminal: false // Desactivamos el QR para usar el código
     });
+
+    // LÓGICA PARA PAIRING CODE
+    if (!conn.authState.creds.registered) {
+        const phoneNumber = await question('   Introduce tu número de WhatsApp con código de país (ej: 57300XXX):\n   > ');
+        const code = await conn.requestPairingCode(phoneNumber.trim());
+        console.log(`\n🔗 TU CÓDIGO DE VINCULACIÓN ES: ${code}\n`);
+    }
 
     conn.ev.on('creds.update', saveCreds);
-
-    conn.ev.on('connection.update', (update) => {
-        const { connection, lastDisconnect, qr } = update;
-        if (qr) qrcode.generate(qr, { small: true });
-        
-        if (connection === 'close') {
-            const shouldReconnect = (lastDisconnect.error instanceof Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-            if (shouldReconnect) startBot();
-        } else if (connection === 'open') {
-            console.log('\n🌟 BOT CONECTADO CON ÉXITO 🌟\n');
-        }
-    });
-
-    conn.ev.on('messages.upsert', async m => {
-        await handler(conn, m);
-    });
+    // ... (resto de tus eventos de conexión y handler)
 }
-
-startBot();
