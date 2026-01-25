@@ -3,7 +3,6 @@ import { fileURLToPath } from "url"
 import path from "path"
 import { unwatchFile, watchFile } from "fs"
 
-// --- FIX PARA __filename en ESM ---
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 
@@ -16,45 +15,26 @@ global.handlerConfig = {
 }
 
 export async function handler(chatUpdate) {
+    // FIX: Usamos 'this' (que es conn) y aseguramos que msgqueque exista
     this.msgqueque = this.msgqueque || []
-    if (!chatUpdate) return
     
+    if (!chatUpdate) return
     let m = chatUpdate.messages[chatUpdate.messages.length - 1]
     if (!m) return
-    if (global.db.data == null) await global.loadDatabase()
+    
+    // Cargar base de datos si es necesario
+    if (global.db && global.db.data == null) await global.loadDatabase()
 
     try {
         m = smsg(this, m) || m
         if (!m || m.isBaileys) return
         
-        // 🚨 CAMBIO IMPORTANTE: Quitamos el "if (m.isGroup) return" para que funcione en grupos
         const isGroup = m.isGroup
-        
-        if (!m.text || typeof m.text !== 'string') return
-        
-        const sender = m.sender
-        const now = Date.now()
+        const text = (m.text || "").trim()
+        const usedPrefix = '.' // Prefijo configurado
 
-        // Lógica de sesiones/menú interactivo
-        if (global.sessions[sender] && (now - global.sessions[sender].time < global.handlerConfig.timeout)) {
-            global.sessions[sender].time = now 
-            if (/^[0-9]+$/.test(m.text.trim())) {
-                const choice = m.text.trim()
-                const state = global.sessions[sender].state || 'main'
-                if (global.handlerConfig.routes[state]?.[choice]) {
-                    m.text = global.handlerConfig.routes[state][choice]
-                    if (m.text === 'salir') delete global.sessions[sender]
-                }
-            }
-        }
-
-        const user = global.db.data.users[m.sender] || (global.db.data.users[m.sender] = {})
-        const chat = global.db.data.chats[m.chat] || (global.db.data.chats[m.chat] = {})
-
-        // Verificación de Owners
-        const isROwner = [...global.owner.map(n => Array.isArray(n) ? n[0] : n)]
-            .map(v => String(v).replace(/[^0-9]/g, "") + "@s.whatsapp.net")
-            .includes(m.sender)
+        // Lógica de Owners
+        const isROwner = [...(global.owner || [])].map(v => v[0] + "@s.whatsapp.net").includes(m.sender)
         const isOwner = isROwner || m.fromMe
 
         // Ejecutor de Plugins
@@ -62,30 +42,25 @@ export async function handler(chatUpdate) {
             const plugin = global.plugins[name]
             if (!plugin || plugin.disabled) continue
 
-            const text = (m.text || "").trim()
-            // Soporte para prefijo punto (.)
-            const usedPrefix = '.'
+            // Verificación de comando con prefijo
             const isCommand = Array.isArray(plugin.command) ? 
-                plugin.command.some(cmd => text.startsWith(usedPrefix + cmd)) : 
-                (plugin.command instanceof RegExp ? plugin.command.test(text) : text.startsWith(usedPrefix + plugin.command))
+                plugin.command.some(cmd => text.toLowerCase().startsWith(usedPrefix + cmd.toLowerCase())) : 
+                (plugin.command instanceof RegExp ? plugin.command.test(text) : text.toLowerCase().startsWith(usedPrefix + plugin.command?.toLowerCase()))
 
             if (!isCommand) continue
 
-            // Validaciones de Propiedades del Plugin
-            if (plugin.rowner && !isROwner) {
-                await this.reply(m.chat, '⚠️ Solo el Propietario Root.', m)
-                continue
-            }
+            // Restricciones
             if (plugin.group && !isGroup) {
                 await this.reply(m.chat, '⚠️ Este comando es solo para grupos.', m)
                 continue
             }
 
-            const args = text.split(' ').slice(1)
-            const command = text.split(' ')[0].slice(1)
+            // Extraer comando y argumentos
+            const str = text.slice(usedPrefix.length).trim()
+            const [command, ...args] = str.split(' ').filter(v => v)
 
             try {
-                // Usamos plugin.exec o plugin.call según como lo definas en tus archivos
+                // Ejecutamos el plugin pasando todo lo necesario
                 const execution = plugin.exec || plugin.call || plugin.default
                 await execution.call(this, m, {
                     conn: this, 
@@ -94,12 +69,10 @@ export async function handler(chatUpdate) {
                     command, 
                     isROwner, 
                     isOwner, 
-                    isGroup,
-                    user, 
-                    chat
+                    isGroup
                 })
             } catch (e) { 
-                console.error(e)
+                console.error(`Error en plugin ${name}:`, e)
             }
             break
         }
@@ -110,15 +83,15 @@ export async function handler(chatUpdate) {
         // Print en consola
         try {
             const print = await import("./lib/print.js")
-            await print.default(m, this)
+            if (print.default) print.default(m, this)
         } catch (e) { 
-            console.warn("Error en print:", e) 
+            // Ignorar errores de print para no detener el proceso
         }
     }
 }
 
-// Corregido para que no de error de "global.__filename is not a function"
-watchFile(__filename, async () => {
+// Watcher corregido
+watchFile(__filename, () => {
     unwatchFile(__filename)
-    console.log("═══ Handler recargado ═══")
+    console.log("✅ Handler actualizado")
 })
