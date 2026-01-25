@@ -1,97 +1,289 @@
-import { useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, makeCacheableSignalKeyStore } from '@whiskeysockets/baileys';
-import makeWASocket from '@whiskeysockets/baileys';
-import pino from 'pino';
-import fs from 'fs';
-import path from 'path';
-import readline from 'readline';
-import chalk from 'chalk';
-import { Boom } from '@hapi/boom';
-import NodeCache from 'node-cache'; // Necesario para no saturar RAM
-import { handler } from './handler.js';
+process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = '1'
+import './settings.js'
+import { fileURLToPath, pathToFileURL } from 'url'
+import { platform } from 'process'
+import fs, { readdirSync, unlinkSync, existsSync, readFileSync, watch } from 'fs'
+import { spawn } from 'child_process'
+import lodash from 'lodash'
+import syntaxerror from 'syntax-error'
+import pino from 'pino'
+import Pino from 'pino'
+import path, { join } from 'path'
+import { Boom } from '@hapi/boom'
+import { makeWASocket, protoType, serialize } from './lib/simple.js'
+import { Low, JSONFile } from 'lowdb'
+import store from './lib/store.js'
+const { DisconnectReason, useMultiFileAuthState, fetchLatestBaileysVersion, makeCacheableSignalKeyStore, jidNormalizedUser } = await import('@whiskeysockets/baileys')
+import readline from 'readline'
+import NodeCache from 'node-cache'
+import pkg from 'google-libphonenumber'
+const { PhoneNumberUtil } = pkg
+const phoneUtil = PhoneNumberUtil.getInstance()
 
-const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
-const question = (texto) => new Promise((resolver) => rl.question(texto, resolver));
-const msgRetryCounterCache = new NodeCache();
+const { chain } = lodash
 
-global.plugins = {};
-global.ownerNumber = ""; 
+protoType()
+serialize()
 
-async function startBot() {
-    const pluginFolder = path.join(process.cwd(), 'plugins');
-    if (!fs.existsSync(pluginFolder)) fs.mkdirSync(pluginFolder);
-    const pluginFiles = fs.readdirSync(pluginFolder).filter(file => file.endsWith('.js'));
-    for (const file of pluginFiles) {
-        try {
-            const module = await import(`./plugins/${file}?update=${Date.now()}`);
-            global.plugins[file] = module.default || module;
-        } catch (e) {}
-    }
-
-    const folderSesion = 'sesion_bot';
-    const { state, saveCreds } = await useMultiFileAuthState(folderSesion);
-    const { version } = await fetchLatestBaileysVersion();
-
-    let opcion;
-    if (!fs.existsSync(`./${folderSesion}/creds.json`)) {
-        console.log(chalk.bgCyan.black('\n ⌨  MENÚ DE VINCULACIÓN '));
-        opcion = await question(chalk.green('1. Código QR\n') + chalk.blue('2. Código de texto (Mac OS Sim)\n--> '));
-    }
-
-    const conn = makeWASocket.default({
-        version,
-        logger: pino({ level: 'silent' }),
-        printQRInTerminal: opcion === '1',
-        auth: {
-            creds: state.creds,
-            keys: makeCacheableSignalKeyStore(state.keys, pino({ level: "fatal" })),
-        },
-        // SIMULACIÓN MAC OS PARA EVITAR "UNU"
-        browser: ['Mac OS', 'Chrome', '121.0.6167.184'], 
-        msgRetryCounterCache,
-        markOnlineOnConnect: true,
-        generateHighQualityLinkPreview: true
-    });
-
-    if (opcion === '2' && !conn.authState.creds.registered) {
-        let phoneNumber = await question(chalk.cyan('\n✦ Ingresa tu número completo (Ej: 573001234567):\n--> '));
-        phoneNumber = phoneNumber.replace(/\D/g, '');
-        global.ownerNumber = phoneNumber + '@s.whatsapp.net';
-
-        setTimeout(async () => {
-            try {
-                let code = await conn.requestPairingCode(phoneNumber);
-                code = code?.match(/.{1,4}/g)?.join("-") || code;
-                console.log(chalk.bold.white(chalk.bgMagenta(`\n✧ CÓDIGO: ${code} ✧\n`)));
-            } catch (err) {
-                console.log(chalk.red('Error al pedir código. Reintenta en 1 min.'));
-            }
-        }, 3000);
-    }
-
-    conn.ev.on('creds.update', saveCreds);
-
-    conn.ev.on('connection.update', async (update) => {
-        const { connection, lastDisconnect } = update;
-        if (connection === 'close') {
-            const reason = new Boom(lastDisconnect?.error)?.output?.statusCode;
-            if (reason !== DisconnectReason.loggedOut) {
-                console.log(chalk.yellow('🔄 Reintentando conexión...'));
-                startBot();
-            } else {
-                console.log(chalk.red('❌ Sesión cerrada. Borra sesion_bot.'));
-            }
-        } else if (connection === 'open') {
-            console.log(chalk.bold.green('\n✅ VINCULADO CON MAC OS'));
-            const target = global.ownerNumber || conn.user.id.split(':')[0] + '@s.whatsapp.net';
-            await conn.sendMessage(target, { text: '✨ *Bot vinculado y listo!* ✨' });
-        }
-    });
-
-    conn.ev.on('messages.upsert', async (chatUpdate) => {
-        const m = chatUpdate.messages[0];
-        if (!m || !m.message) return;
-        await handler(conn, m);
-    });
+global.__filename = function filename(pathURL = import.meta.url, rmPrefix = platform !== 'win32') {
+return rmPrefix ? /file:\/\/\//.test(pathURL) ? fileURLToPath(pathURL) : pathURL : pathToFileURL(pathURL).toString()
+}
+global.__dirname = function dirname(pathURL) {
+return path.dirname(global.__filename(pathURL, true))
 }
 
-startBot();
+global.timestamp = {start: new Date}
+const __dirname = global.__dirname(import.meta.url)
+
+global.prefix = new RegExp('^[#!./-]')
+
+global.db = new Low(new JSONFile('database.json'))
+global.DATABASE = global.db
+global.loadDatabase = async function loadDatabase() {
+if (global.db.READ) {
+return new Promise((resolve) => setInterval(async function() {
+if (!global.db.READ) {
+clearInterval(this)
+resolve(global.db.data == null ? global.loadDatabase() : global.db.data)
+}}, 1 * 1000))
+}
+if (global.db.data !== null) return
+global.db.READ = true
+await global.db.read().catch(console.error)
+global.db.READ = null
+global.db.data = {
+users: {},
+chats: {},
+settings: {},
+...(global.db.data || {}),
+}
+global.db.chain = chain(global.db.data)
+}
+loadDatabase()
+
+const {state, saveCreds} = await useMultiFileAuthState(global.sessions)
+const msgRetryCounterCache = new NodeCache({ stdTTL: 0, checkperiod: 0 })
+const userDevicesCache = new NodeCache({ stdTTL: 0, checkperiod: 0 })
+const { version } = await fetchLatestBaileysVersion()
+
+let phoneNumber = global.botNumber
+const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
+const question = (texto) => new Promise((resolver) => rl.question(texto, resolver))
+
+console.info = () => { }
+
+const connectionOptions = {
+logger: pino({ level: 'silent' }),
+printQRInTerminal: false,
+browser: ["MacOs", "Safari"],
+auth: {
+creds: state.creds,
+keys: makeCacheableSignalKeyStore(state.keys, Pino({ level: "fatal" }).child({ level: "fatal" })),
+},
+markOnlineOnConnect: false,
+generateHighQualityLinkPreview: true,
+syncFullHistory: false,
+getMessage: async (key) => {
+try {
+let jid = jidNormalizedUser(key.remoteJid)
+let msg = await store.loadMessage(jid, key.id)
+return msg?.message || ""
+} catch (error) {
+return ""
+}},
+msgRetryCounterCache: msgRetryCounterCache || new Map(),
+userDevicesCache: userDevicesCache || new Map(),
+defaultQueryTimeoutMs: undefined,
+cachedGroupMetadata: (jid) => globalThis.conn.chats[jid] ?? {},
+version: version,
+keepAliveIntervalMs: 55000,
+maxIdleTimeMs: 60000,
+}
+
+global.conn = makeWASocket(connectionOptions)
+conn.ev.on("creds.update", saveCreds)
+
+if (!fs.existsSync(`./${sessions}/creds.json`)) {
+if (!conn.authState.creds.registered) {
+let addNumber
+if (!!phoneNumber) {
+addNumber = phoneNumber.replace(/[^0-9]/g, '')
+} else {
+do {
+phoneNumber = await question('Ingrese el número de WhatsApp (con código de país):\n---> ')
+phoneNumber = phoneNumber.replace(/\D/g,'')
+if (!phoneNumber.startsWith('+')) {
+phoneNumber = `+${phoneNumber}`
+}} while (!await isValidPhoneNumber(phoneNumber))
+rl.close()
+addNumber = phoneNumber.replace(/\D/g, '')
+setTimeout(async () => {
+let codeBot = await conn.requestPairingCode(addNumber)
+codeBot = codeBot.match(/.{1,4}/g)?.join("-") || codeBot
+console.log('Código de vinculación:', codeBot)
+}, 3000)
+}}}
+
+conn.isInit = false
+conn.well = false
+
+if (global.db) setInterval(async () => {
+if (global.db.data) await global.db.write()
+}, 30 * 1000)
+
+async function connectionUpdate(update) {
+const {connection, lastDisconnect, isNewLogin} = update
+global.stopped = connection
+if (isNewLogin) conn.isInit = true
+const code = lastDisconnect?.error?.output?.statusCode || lastDisconnect?.error?.output?.payload?.statusCode
+if (code && code !== DisconnectReason.loggedOut && conn?.ws.socket == null) {
+await global.reloadHandler(true).catch(console.error)
+global.timestamp.connect = new Date
+}
+if (global.db.data == null) loadDatabase()
+if (connection === "open") {
+const userJid = jidNormalizedUser(conn.user.id)
+const userName = conn.user.name || conn.user.verifiedName || "Desconocido"
+console.log(`Conectado como: ${userName}`)
+}
+let reason = new Boom(lastDisconnect?.error)?.output?.statusCode
+if (connection === "close") {
+console.log("Reconectando...")
+await global.reloadHandler(true).catch(console.error)
+}}
+
+process.on('uncaughtException', console.error)
+
+let isInit = true
+let handler = await import('./handler.js')
+global.reloadHandler = async function(restatConn) {
+try {
+const Handler = await import(`./handler.js?update=${Date.now()}`).catch(console.error)
+if (Object.keys(Handler || {}).length) handler = Handler
+} catch (e) {
+console.error(e)
+}
+if (restatConn) {
+const oldChats = global.conn.chats
+try {
+global.conn.ws.close()
+} catch { }
+conn.ev.removeAllListeners()
+global.conn = makeWASocket(connectionOptions, {chats: oldChats})
+isInit = true
+}
+if (!isInit) {
+conn.ev.off('messages.upsert', conn.handler)
+conn.ev.off('connection.update', conn.connectionUpdate)
+conn.ev.off('creds.update', conn.credsUpdate)
+}
+conn.handler = handler.handler.bind(global.conn)
+conn.connectionUpdate = connectionUpdate.bind(global.conn)
+conn.credsUpdate = saveCreds.bind(global.conn, true)
+conn.ev.on('messages.upsert', conn.handler)
+conn.ev.on('connection.update', conn.connectionUpdate)
+conn.ev.on('creds.update', conn.credsUpdate)
+isInit = false
+return true
+}
+
+process.on('unhandledRejection', (reason, promise) => {
+console.error("Rechazo no manejado:", reason)
+})
+
+const pluginFolder = global.__dirname(join(__dirname, './plugins/index'))
+const pluginFilter = (filename) => /\.js$/.test(filename)
+global.plugins = {}
+
+async function filesInit() {
+for (const filename of readdirSync(pluginFolder).filter(pluginFilter)) {
+try {
+const file = global.__filename(join(pluginFolder, filename))
+const module = await import(file)
+global.plugins[filename] = module.default || module
+} catch (e) {
+conn.logger.error(e)
+delete global.plugins[filename]
+}}}
+filesInit().then((_) => Object.keys(global.plugins)).catch(console.error)
+
+global.reload = async (_ev, filename) => {
+if (pluginFilter(filename)) {
+const dir = global.__filename(join(pluginFolder, filename), true)
+if (filename in global.plugins) {
+if (existsSync(dir)) conn.logger.info(`Plugin actualizado: ${filename}`)
+else {
+conn.logger.warn(`Plugin eliminado: ${filename}`)
+return delete global.plugins[filename]
+}} else conn.logger.info(`Nuevo plugin: ${filename}`)
+const err = syntaxerror(readFileSync(dir), filename, {
+sourceType: 'module',
+allowAwaitOutsideFunction: true,
+})
+if (err) conn.logger.error(`Error de sintaxis en '${filename}'\n${format(err)}`)
+else {
+try {
+const module = (await import(`${global.__filename(dir)}?update=${Date.now()}`))
+global.plugins[filename] = module.default || module
+} catch (e) {
+conn.logger.error(`Error al cargar plugin '${filename}\n${format(e)}'`)
+} finally {
+global.plugins = Object.fromEntries(Object.entries(global.plugins).sort(([a], [b]) => a.localeCompare(b)))
+}}}}
+
+Object.freeze(global.reload)
+watch(pluginFolder, global.reload)
+await global.reloadHandler()
+
+async function _quickTest() {
+const test = await Promise.all([
+spawn('ffmpeg'),
+spawn('ffprobe'),
+spawn('ffmpeg', ['-hide_banner', '-loglevel', 'error', '-filter_complex', 'color', '-frames:v', '1', '-f', 'webp', '-']),
+spawn('convert'),
+spawn('magick'),
+spawn('gm'),
+spawn('find', ['--version']),
+].map((p) => {
+return Promise.race([
+new Promise((resolve) => {
+p.on('close', (code) => {
+resolve(code !== 127)
+})
+}),
+new Promise((resolve) => {
+p.on('error', (_) => resolve(false))
+})])
+}))
+const [ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find] = test
+const s = global.support = {ffmpeg, ffprobe, ffmpegWebp, convert, magick, gm, find}
+Object.freeze(global.support)
+}
+
+setInterval(async () => {
+const tmpDir = join(__dirname, 'tmp')
+try {
+const filenames = readdirSync(tmpDir)
+filenames.forEach(file => {
+const filePath = join(tmpDir, file)
+unlinkSync(filePath)})
+console.log('Archivos temporales eliminados')
+} catch {
+console.log('No se pudieron eliminar archivos temporales')
+}}, 30 * 1000)
+
+_quickTest().catch(console.error)
+
+async function isValidPhoneNumber(number) {
+try {
+number = number.replace(/\s+/g, '')
+if (number.startsWith('+521')) {
+number = number.replace('+521', '+52')
+} else if (number.startsWith('+52') && number[4] === '1') {
+number = number.replace('+52 1', '+52')
+}
+const parsedNumber = phoneUtil.parseAndKeepRawInput(number)
+return phoneUtil.isValidNumber(parsedNumber)
+} catch (error) {
+return false
+}}
